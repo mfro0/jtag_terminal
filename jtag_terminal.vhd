@@ -172,6 +172,7 @@ architecture rtl of jtag_terminal is
     signal uart_out_busy            : std_ulogic := '0';
     signal uart_out_data            : character;
     signal uart_in_data_available   : std_ulogic;
+    signal uart_in_data_ack         : std_ulogic;
     signal uart_in_data             : character;
     
 begin 
@@ -207,6 +208,7 @@ begin
             
             rx_data             => uart_in_data,
             rx_data_ready       => uart_in_data_available,
+            rx_data_ack         => uart_in_data_ack,
             
             tx_data             => uart_out_data,
             tx_start            => uart_out_start,
@@ -225,26 +227,31 @@ begin
             reset_n                     => reset_n,
             led                         => blink
         );
-        
-    process
-        variable c      : character;
-        variable haveit : std_ulogic;
+      
+    echo : block
+        signal c            : character;
+        signal haveit       : std_ulogic;
     begin
-        wait until rising_edge(clk);
-        if uart_in_data_available then
-            c := uart_in_data;
-            haveit := '1';
-        end if;
-        /*
-        if not uart_out_busy and haveit then
-            uart_out_data <= c;
-            uart_out_start <= '1';
-            haveit := '0';
-        else
-            uart_out_start <= '0';
-        end if;
-        */
-    end process;
+        process
+        begin
+            wait until rising_edge(clk);
+              
+            -- what comes in goes out
+              
+            if uart_in_data_available then
+                c <= uart_in_data;
+                haveit <= '1';
+            end if;
+            
+              if not uart_out_busy and haveit then
+                uart_out_data <= c;
+                uart_out_start <= '1';
+                haveit <= '0';
+            else
+                uart_out_start <= '0';
+            end if;
+        end process;
+    end block;
     
     LED(0) <= button_reset_n;
     LED(1) <= reset_n;
