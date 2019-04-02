@@ -36,20 +36,20 @@ architecture rtl of jtag_uart is
             r_val                       : in std_ulogic;                        -- data is valid
             r_ena                       : out std_ulogic;                       -- allow to send data
             
-            t_dat                       : out character;                        -- data to receive
-            t_dav                       : in std_ulogic;                        -- data fetched
-            t_ena                       : out std_ulogic;                       -- receiver enabled
+            t_dat                       : out character;                        -- incoming data
+            t_dav                       : in std_ulogic;                        -- give us more data
+            t_ena                       : out std_ulogic;                       -- received data available
             t_pause                     : out std_ulogic
         );
     end component alt_jtag_atlantic;
 
-    signal r_dat                        : character;
-    signal r_val                        : std_ulogic;
-    signal r_ena                        : std_ulogic;
-    signal t_dat                        : character;
-    signal t_dav                        : std_ulogic;
-    signal t_ena                        : std_ulogic;
-    signal t_pause                      : std_ulogic;
+    signal send_data                    : character;
+    signal tx_data_valid                : std_ulogic;
+    signal tx_idle                      : std_ulogic;
+    signal received_data                : character;
+    signal rx_ready                     : std_ulogic;
+    signal rx_valid                     : std_ulogic;
+    signal rx_paused                    : std_ulogic;
 
     signal is_full_reg                  : std_ulogic;
     signal data_reg                     : std_ulogic_vector(7 downto 0);
@@ -69,47 +69,57 @@ begin
             clk                         => clk,
             rst_n                       => reset_n,
 
-            -- alt_jtag_atlantic ports have _very_ strange (backwards) names...
+            -- alt_jtag_atlantic ports have _very_ strange (kind of backwards) names...
             
             -- this is the receiving part of alt_jtag_atlantic, the ports
             -- we actually *send* data to
-            r_dat                       => r_dat,
-            r_val                       => r_val,
-            r_ena                       => r_ena,
+            r_dat                       => send_data,
+            r_val                       => tx_data_valid,
+            r_ena                       => tx_idle,
 
-            -- this is the sending part of alt_jtag_atlantic, the ports
+            -- this is the sending part of alt_jtag_atlantic, i.e. the ports
             -- we receive data from
-            t_dat                       => t_dat,
-            t_dav                       => t_dav,
-            t_ena                       => t_ena,
-            t_pause                     => t_pause
+            t_dat                       => received_data,
+            t_dav                       => rx_ready,
+            t_ena                       => rx_valid,
+            t_pause                     => rx_paused
         );
 
 
     p_send : process(all)
     begin
         if rising_edge(clk) then
-            if r_ena then
-                r_val <= '1';
-                r_dat <= tx_data;
+            if tx_idle then
+                tx_data_valid <= '1';
+                send_data <= tx_data;
             else
-                r_val <= '0';
+                tx_data_valid <= '0';
             end if;
         end if;
     end process p_send;
     
-    p_receive : process(all)
+    b_receive : block
+        type rx_state_type is (START, WAIT_RECEIVE);
+		signal rx_state     : rx_state_type := START;
     begin
-        if rising_edge(clk) then
-            if t_dav /* and not t_pause */ then
-                rx_data <= t_dat;
-                t_ena <= '1';           -- signal fetched data
-            else 
-                t_ena <= '0';
-            end if;
-        end if;
-    end process p_receive;
+        p_receive : process(all)
+        begin
+            if rising_edge(clk) then
+                case rx_state is
+                    when START =>
+                        rx_ready <= '1';
+                        rx_state <= WAIT_RECEIVE;
                 
-    tx_busy <= r_ena;
-    rx_data_ready <= t_dav;
+                    when WAIT_RECEIVE =>
+                        if rx_valid then
+                            rx_data <= received_data;
+                            rx_ready <= '0';           -- signal fetched data
+                            rx_state <= START;
+                        end if;
+                end case;
+            end if;
+        end process p_receive;
+    end block b_receive;
+    
+    tx_busy <= tx_idle;
 end architecture rtl;
