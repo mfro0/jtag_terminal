@@ -207,7 +207,7 @@ begin
             reset_n             => reset_n,
             
             rx_data             => uart_in_data,
-            rx_data_ready       => uart_in_data_available,
+            rx_ready            => uart_in_data_available,
             rx_data_ack         => uart_in_data_ack,
             
             tx_data             => uart_out_data,
@@ -229,7 +229,7 @@ begin
         );
       
     echo : block
-        signal c            : character;
+        signal c            : character := '+';
         signal haveit       : std_ulogic;
     begin
         process
@@ -241,12 +241,14 @@ begin
             if uart_in_data_available then
                 c <= uart_in_data;
                 haveit <= '1';
+                uart_in_data_ack <= '1';
             end if;
             
-              if not uart_out_busy and haveit then
+              if not uart_out_busy then
                 uart_out_data <= c;
                 uart_out_start <= '1';
                 haveit <= '0';
+                uart_in_data_ack <= '0';
             else
                 uart_out_start <= '0';
             end if;
@@ -260,5 +262,5 @@ begin
     LED(4) <= '1';
     LED(5) <= not pll_locked;
     LED(6) <= '1';
-    LED(7) <= blink;              -- off for now
+    LED(7) <= blink;
 end architecture rtl;

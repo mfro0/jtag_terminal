@@ -395,7 +395,7 @@ set_location_assignment PIN_N3 -to "MIPI_MD_p[3](n)"
 set_location_assignment PIN_U18 -to termination_blk0~_rup_pad
 set_location_assignment PIN_U17 -to termination_blk0~_rdn_pad
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -entity jtag_uart -section_id Top
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_NETLIST_TYPE POST_FIT -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 

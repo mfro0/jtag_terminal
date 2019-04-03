@@ -9,7 +9,7 @@ entity jtag_uart is
         reset_n                         : in std_ulogic;
 
         rx_data                         : out character;    -- received data
-        rx_data_ready                   : out std_ulogic;   -- received data valid
+        rx_ready                        : out std_ulogic;   -- received data valid
         rx_data_ack                     : in std_ulogic;    -- got it
 
         tx_data                         : in  character;    -- data to send
@@ -43,18 +43,11 @@ architecture rtl of jtag_uart is
         );
     end component alt_jtag_atlantic;
 
-    signal send_data                    : character;
+
+
     signal tx_data_valid                : std_ulogic;
     signal tx_idle                      : std_ulogic;
-    signal received_data                : character;
-    signal rx_ready                     : std_ulogic;
-    signal rx_valid                     : std_ulogic;
     signal rx_paused                    : std_ulogic;
-
-    signal is_full_reg                  : std_ulogic;
-    signal data_reg                     : std_ulogic_vector(7 downto 0);
-
-    signal cnt                          : unsigned(24 downto 0);
 begin
     i_jtag_uart : component alt_jtag_atlantic
         generic map
@@ -73,15 +66,15 @@ begin
             
             -- this is the receiving part of alt_jtag_atlantic, the ports
             -- we actually *send* data to
-            r_dat                       => send_data,
+            r_dat                       => tx_data,
             r_val                       => tx_data_valid,
             r_ena                       => tx_idle,
 
             -- this is the sending part of alt_jtag_atlantic, i.e. the ports
             -- we receive data from
-            t_dat                       => received_data,
-            t_dav                       => rx_ready,
-            t_ena                       => rx_valid,
+            t_dat                       => rx_data,
+            t_dav                       => rx_data_ack,
+            t_ena                       => rx_ready,
             t_pause                     => rx_paused
         );
 
@@ -91,7 +84,6 @@ begin
         if rising_edge(clk) then
             if tx_idle then
                 tx_data_valid <= '1';
-                send_data <= tx_data;
             else
                 tx_data_valid <= '0';
             end if;
@@ -107,13 +99,10 @@ begin
             if rising_edge(clk) then
                 case rx_state is
                     when START =>
-                        rx_ready <= '1';
                         rx_state <= WAIT_RECEIVE;
                 
                     when WAIT_RECEIVE =>
-                        if rx_valid then
-                            rx_data <= received_data;
-                            rx_ready <= '0';           -- signal fetched data
+                        if rx_ready then
                             rx_state <= START;
                         end if;
                 end case;
@@ -121,5 +110,5 @@ begin
         end process p_receive;
     end block b_receive;
     
-    tx_busy <= tx_idle;
+    tx_busy <= not tx_idle;
 end architecture rtl;
