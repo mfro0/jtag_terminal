@@ -10,7 +10,7 @@ entity jtag_uart is
 
         rx_data                         : out character;    -- received data
         rx_ready                        : out std_ulogic;   -- received data valid
-        rx_data_ack                     : in std_ulogic;    -- got it
+        rx_data_req                     : in std_ulogic;    -- got it
 
         tx_data                         : in  character;    -- data to send
         tx_start                        : in  std_ulogic;   -- start sending data
@@ -73,7 +73,7 @@ begin
             -- this is the sending part of alt_jtag_atlantic, i.e. the ports
             -- we receive data from
             t_dat                       => rx_data,
-            t_dav                       => rx_data_ack,
+            t_dav                       => rx_data_req,
             t_ena                       => rx_ready,
             t_pause                     => rx_paused
         );

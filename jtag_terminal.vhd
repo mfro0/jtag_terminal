@@ -172,7 +172,7 @@ architecture rtl of jtag_terminal is
     signal uart_out_busy            : std_ulogic := '0';
     signal uart_out_data            : character;
     signal uart_in_data_available   : std_ulogic;
-    signal uart_in_data_ack         : std_ulogic;
+    signal uart_in_data_req         : std_ulogic;
     signal uart_in_data             : character;
     
 begin 
@@ -208,7 +208,7 @@ begin
             
             rx_data             => uart_in_data,
             rx_ready            => uart_in_data_available,
-            rx_data_ack         => uart_in_data_ack,
+            rx_data_req         => uart_in_data_req,
             
             tx_data             => uart_out_data,
             tx_start            => uart_out_start,
@@ -239,16 +239,17 @@ begin
             -- what comes in goes out
               
             if uart_in_data_available then
+                uart_in_data_req <= '1';
                 c <= uart_in_data;
                 haveit <= '1';
-                uart_in_data_ack <= '1';
+                uart_in_data_req <= '1';
             end if;
             
               if not uart_out_busy then
                 uart_out_data <= c;
                 uart_out_start <= '1';
                 haveit <= '0';
-                uart_in_data_ack <= '0';
+                uart_in_data_req <= '0';
             else
                 uart_out_start <= '0';
             end if;
