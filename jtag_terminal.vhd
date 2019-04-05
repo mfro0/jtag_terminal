@@ -233,6 +233,7 @@ begin
       
     echo : block
         signal c            : character := '+';
+        signal have_it      : std_ulogic := '0';
     begin
         process
         begin
@@ -242,14 +243,16 @@ begin
               
             if not uart_in_data_available then
                 uart_in_data_req <= '1';
+                have_it <= '0';
+            else
+                uart_in_data_req <= '0';
                 c <= uart_in_data;
-                uart_in_data_req <= '1';
+                have_it <= '1';
             end if;
             
-            if uart_out_idle then
+            if uart_out_idle and have_it then
                 uart_out_data <= c;
                 uart_out_start <= '1';
-                uart_in_data_req <= '0';
             else
                 uart_out_start <= '0';
             end if;
