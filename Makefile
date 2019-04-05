@@ -1,14 +1,15 @@
 LANG=C
 ifeq ($(OS),Windows_NT)
-	ALTPATH=c:/opt/intelFPGA_lite/18.1/quartus/bin64
+	ALTPATH=c:/opt/altera/13.1/quartus/bin64
+	PROJ=jtag_terminal_cy3
 	ALTOPT=
 else
 	ALTPATH=/opt/intelFPGA_lite/18.1/quartus/bin
+	PROJ=jtag_terminal
 	ALTOPT=--64bit
 endif
 BITSTREAM=output_files/$(PROJ).sof
 
-PROJ=jtag_terminal
 
 all: precmd synthesis fitter assembler timing_analyzer eda
 
