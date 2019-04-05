@@ -203,6 +203,11 @@ begin
         );
 
     i_uart : entity work.jtag_uart
+        generic map
+        (
+            LOG2_RXFIFO_DEPTH   => 0,
+            LOG2_TXFIFO_DEPTH   => 0
+        )
         port map
         (
             clk                 => clk,

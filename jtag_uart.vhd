@@ -3,6 +3,11 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity jtag_uart is
+    generic
+    (
+        LOG2_RXFIFO_DEPTH               : natural;
+        LOG2_TXFIFO_DEPTH               : natural
+    );
     port
     (
         clk                             : in std_ulogic;
@@ -49,8 +54,8 @@ begin
         generic map
         (
             INSTANCE_ID                 => 0,
-            LOG2_RXFIFO_DEPTH           => 6,
-            LOG2_TXFIFO_DEPTH           => 6,
+            LOG2_RXFIFO_DEPTH           => LOG2_RXFIFO_DEPTH,
+            LOG2_TXFIFO_DEPTH           => LOG2_TXFIFO_DEPTH,
             SLD_AUTO_INSTANCE_INDEX     => "YES"
         )
         port map
