@@ -24,8 +24,8 @@ architecture rtl of jtag_uart is
         generic
         (
             INSTANCE_ID                 : integer := 0;
-            LOG2_RXFIFO_DEPTH           : integer := 6;
-            LOG2_TXFIFO_DEPTH           : integer := 6;
+            LOG2_RXFIFO_DEPTH           : integer := 0;
+            LOG2_TXFIFO_DEPTH           : integer := 0;
             SLD_AUTO_INSTANCE_INDEX     : string := "YES"
         );
         port
