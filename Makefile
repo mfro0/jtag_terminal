@@ -32,7 +32,7 @@ eda:
 
 # program the beast
 p: $(BITSTREAM)
-	$(ALTPATH)/quartus_pgm $(ALTOPT) -m JTAG -o P\;$(BITSTREAM)@1
+	$(ALTPATH)/quartus_pgm $(ALTOPT) -m JTAG --cable 1 -o P\;$(BITSTREAM)@1
 
 .PHONY: clean
 clean:
