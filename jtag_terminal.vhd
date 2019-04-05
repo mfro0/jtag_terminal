@@ -241,9 +241,8 @@ begin
               
             -- what comes in goes out
               
-            if not uart_in_data_available then
+            if not uart_in_data_available and not have_it then
                 uart_in_data_req <= '1';
-                have_it <= '0';
             else
                 uart_in_data_req <= '0';
                 c <= uart_in_data;
