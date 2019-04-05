@@ -253,6 +253,7 @@ begin
             if uart_out_idle and have_it then
                 uart_out_data <= c;
                 uart_out_start <= '1';
+                have_it <= '0';
             else
                 uart_out_start <= '0';
             end if;
