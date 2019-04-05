@@ -10,11 +10,12 @@ entity jtag_uart is
 
         rx_data                         : out character;    -- received data
         rx_ready                        : out std_ulogic;   -- received data valid
-        rx_data_req                     : in std_ulogic;    -- got it
+        rx_data_req                     : in std_ulogic;    -- ask for data
+        rx_paused                       : out std_ulogic;   -- receive paused
 
         tx_data                         : in  character;    -- data to send
         tx_start                        : in  std_ulogic;   -- start sending data
-        tx_busy                         : out std_ulogic    -- we are still busy sending
+        tx_idle                         : out std_ulogic    -- we are not busy sending
      );
 end entity jtag_uart;
 
@@ -43,11 +44,6 @@ architecture rtl of jtag_uart is
         );
     end component alt_jtag_atlantic;
 
-
-
-    signal tx_data_valid                : std_ulogic;
-    signal tx_idle                      : std_ulogic;
-    signal rx_paused                    : std_ulogic;
 begin
     i_jtag_uart : component alt_jtag_atlantic
         generic map
@@ -67,7 +63,7 @@ begin
             -- this is the receiving part of alt_jtag_atlantic, the ports
             -- we actually *send* data to
             r_dat                       => tx_data,
-            r_val                       => tx_data_valid,
+            r_val                       => tx_start,
             r_ena                       => tx_idle,
 
             -- this is the sending part of alt_jtag_atlantic, i.e. the ports
@@ -77,38 +73,4 @@ begin
             t_ena                       => rx_ready,
             t_pause                     => rx_paused
         );
-
-
-    p_send : process(all)
-    begin
-        if rising_edge(clk) then
-            if tx_idle then
-                tx_data_valid <= '1';
-            else
-                tx_data_valid <= '0';
-            end if;
-        end if;
-    end process p_send;
-    
-    b_receive : block
-        type rx_state_type is (START, WAIT_RECEIVE);
-		signal rx_state     : rx_state_type := START;
-    begin
-        p_receive : process(all)
-        begin
-            if rising_edge(clk) then
-                case rx_state is
-                    when START =>
-                        rx_state <= WAIT_RECEIVE;
-                
-                    when WAIT_RECEIVE =>
-                        if rx_ready then
-                            rx_state <= START;
-                        end if;
-                end case;
-            end if;
-        end process p_receive;
-    end block b_receive;
-    
-    tx_busy <= not tx_idle;
 end architecture rtl;
