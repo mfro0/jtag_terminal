@@ -1,0 +1,37 @@
+[*]
+[*] GTKWave Analyzer v3.3.98 (w)1999-2019 BSI
+[*] Sat Apr  6 21:56:34 2019
+[*]
+[dumpfile] "/home/mfro/Dokumente/Development/vhdl/jtag_terminal/ghdl/tb.ghw"
+[dumpfile_mtime] "Sat Apr  6 21:52:52 2019"
+[dumpfile_size] 39776276
+[savefile] "/home/mfro/Dokumente/Development/vhdl/jtag_terminal/ghdl/tb.gtkw"
+[timestart] 39775100000
+[size] 1920 1016
+[pos] -1 -1
+*-26.246498 40020000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.tb.
+[treeopen] top.tb.i_jtag_terminal.
+[treeopen] top.tb.i_jtag_terminal.echo.
+[treeopen] top.tb.i_jtag_terminal.i_reset_button.
+[sst_width] 416
+[signals_width] 223
+[sst_expanded] 1
+[sst_vpaned_height] 285
+@28
+top.tb.clk
+@22
+#{top.tb.i_jtag_terminal.echo.str[1:5]} top.tb.i_jtag_terminal.echo.str[1] top.tb.i_jtag_terminal.echo.str[2] top.tb.i_jtag_terminal.echo.str[3] top.tb.i_jtag_terminal.echo.str[4] top.tb.i_jtag_terminal.echo.str[5]
+#{top.tb.i_jtag_terminal.echo.counter[15:0]} top.tb.i_jtag_terminal.echo.counter[15] top.tb.i_jtag_terminal.echo.counter[14] top.tb.i_jtag_terminal.echo.counter[13] top.tb.i_jtag_terminal.echo.counter[12] top.tb.i_jtag_terminal.echo.counter[11] top.tb.i_jtag_terminal.echo.counter[10] top.tb.i_jtag_terminal.echo.counter[9] top.tb.i_jtag_terminal.echo.counter[8] top.tb.i_jtag_terminal.echo.counter[7] top.tb.i_jtag_terminal.echo.counter[6] top.tb.i_jtag_terminal.echo.counter[5] top.tb.i_jtag_terminal.echo.counter[4] top.tb.i_jtag_terminal.echo.counter[3] top.tb.i_jtag_terminal.echo.counter[2] top.tb.i_jtag_terminal.echo.counter[1] top.tb.i_jtag_terminal.echo.counter[0]
+@420
+top.tb.i_jtag_terminal.i_uart.tx_data
+@28
+top.tb.i_jtag_terminal.reset_n
+top.tb.i_jtag_terminal.button_reset_n
+@29
+#{top.tb.i_jtag_terminal.key[1:0]} top.tb.i_jtag_terminal.key[1] top.tb.i_jtag_terminal.key[0]
+@22
+#{top.tb.i_jtag_terminal.led[7:0]} top.tb.i_jtag_terminal.led[7] top.tb.i_jtag_terminal.led[6] top.tb.i_jtag_terminal.led[5] top.tb.i_jtag_terminal.led[4] top.tb.i_jtag_terminal.led[3] top.tb.i_jtag_terminal.led[2] top.tb.i_jtag_terminal.led[1] top.tb.i_jtag_terminal.led[0]
+[pattern_trace] 1
+[pattern_trace] 0
