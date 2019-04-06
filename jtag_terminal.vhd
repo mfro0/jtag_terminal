@@ -181,7 +181,6 @@ architecture rtl of jtag_terminal is
         variable str        : string(1 to len);
         variable nibble     : integer;
     begin
-        assert false report "str'high=" & integer'image(str'high) severity note;
         for i in 0 to len - 1 loop
             nibble := to_integer(num(num'high - i * 4 downto num'high - i * 4 - 3));
             if nibble > 9 then
@@ -189,10 +188,7 @@ architecture rtl of jtag_terminal is
             else
                 str(i + 1) := character'val(nibble + character'pos('0'));
             end if;
-            assert false report "str(" & integer'image(i + 1) & ") = " & str(i + 1) severity note;
         end loop;
-        assert false report "str=" & str severity note;
-        -- str := (others => 'A');
         return str;
     end function to_hexstr;
 
