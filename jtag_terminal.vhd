@@ -220,8 +220,9 @@ begin
     i_uart : entity work.jtag_uart
         generic map
         (
-            LOG2_RXFIFO_DEPTH   => 32,
-            LOG2_TXFIFO_DEPTH   => 32
+            -- disable FIFO to make sure we detect overruns
+            LOG2_RXFIFO_DEPTH   => 0,
+            LOG2_TXFIFO_DEPTH   => 0
         )
         port map
         (
@@ -263,57 +264,60 @@ begin
         signal ws_busy          : std_ulogic := '0';
         signal index            : integer := 0;
     begin
-        -- count up counter if not currently writing the string
-        counter <= 16d"0" when counter = counter_max and rising_edge(clk) and ws_busy = '0' else
-                   resize(counter + 1, counter'length) when rising_edge(clk) and ws_busy = '0'
-                   else counter;
-
-
         -- start string write if previous write string finished
         str_out_start <= '1' when not ws_busy else '0';
 
-        ws : process
+        ws : process(all)
         begin
-            wait until rising_edge(clk);
-
-            
-            case out_status is
-                when IDLE =>
-                    if str_out_start = '1' then
-
-                        -- convert counter to hex if not currently writing the string
-                        str <= to_hexstr(counter, str'length - 1) & character'val(10);
-                        ws_busy <= '1';
-                        out_status <= START;
-                    end if;
-
-                when START =>
-                    if uart_out_idle then
-                        uart_out_data <= str(index);
-                        uart_out_start <= '1';
-                        out_status <= REQ;
-                    end if;
-
-                when REQ =>
-                    -- wait for uart_out_idle to become inactive
-                    if not uart_out_idle then
-                        out_status <= SEND;
-                        uart_out_start <= '0';
-                        index <= index + 1;
-                    end if;
-
-                when SEND =>
-                    -- wait for uart_out_idle to become active again
-                    if uart_out_idle then
-                        if index > str'length then
-                            index <= 0;
-                            ws_busy <= '0';
-                            out_status <= IDLE;
-                        else
+            if not reset_n then
+                counter <= (others => '0');
+            elsif rising_edge(clk) then
+                case out_status is
+                    when IDLE =>
+                        if str_out_start = '1' then
+    
+                            -- count up counter
+                            if counter = counter_max then
+                                counter <= (others => '0');
+                            else
+                                counter <= resize(counter + 1, counter'length);
+                            end if;
+                            
+                            -- convert counter to hex
+                            str <= to_hexstr(counter, str'length - 1) & character'val(10);
+                            
+                            ws_busy <= '1';
                             out_status <= START;
                         end if;
-                    end if;
-            end case;
+    
+                    when START =>
+                        if uart_out_idle then
+                            uart_out_data <= str(index);
+                            uart_out_start <= '1';
+                            out_status <= REQ;
+                        end if;
+    
+                    when REQ =>
+                        -- wait for uart_out_idle to become inactive
+                        if not uart_out_idle then
+                            out_status <= SEND;
+                            uart_out_start <= '0';
+                            index <= index + 1;
+                        end if;
+    
+                    when SEND =>
+                        -- wait for uart_out_idle to become active again
+                        if uart_out_idle then
+                            if index > str'length then
+                                index <= 0;
+                                ws_busy <= '0';
+                                out_status <= IDLE;
+                            else
+                                out_status <= START;
+                            end if;
+                        end if;
+                end case;
+            end if; -- if rising_edge(clk)
         end process ws;
 
         /*
