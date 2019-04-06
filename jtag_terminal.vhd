@@ -185,7 +185,7 @@ architecture rtl of jtag_terminal is
         for i in 0 to len - 1 loop
             nibble := to_integer(num(num'high - i * 4 downto num'high - i * 4 - 3));
             if nibble > 9 then
-                str(i + 1) := character'val(nibble + character'pos('A') - 10);
+                str(i + 1) := character'val(nibble + character'pos('a') - 10);
             else
                 str(i + 1) := character'val(nibble + character'pos('0'));
             end if;
@@ -258,9 +258,9 @@ begin
     echo : block
         signal c                : character := '+';
         signal have_it          : std_ulogic := '0';
-        signal counter          : unsigned(7 downto 0) := 8d"0";
-        constant counter_max    : unsigned(7 downto 0) := 8d"255";
-        signal str              : string(1 to 3);
+        signal counter          : unsigned(15 downto 0) := 16d"0";
+        constant counter_max    : unsigned(15 downto 0) := 16d"65535";
+        signal str              : string(1 to 5);
         type out_status_type is (IDLE, START, REQ, SEND);
         signal out_status       : out_status_type := IDLE;
         signal str_out_start    : std_ulogic := '0';
@@ -268,12 +268,10 @@ begin
         signal index            : integer := 0;
     begin
         -- count up counter if not currently writing the string
-        counter <= 8d"0" when counter = counter_max and rising_edge(clk) and ws_busy = '0' else
+        counter <= 16d"0" when counter = counter_max and rising_edge(clk) and ws_busy = '0' else
                    resize(counter + 1, counter'length) when rising_edge(clk) and ws_busy = '0'
                    else counter;
 
-        -- convert counter to hex if not currently writing the string
-        str <= to_hexstr(counter, str'length - 1) & character'val(10) when rising_edge(clk) and ws_busy = '0';
 
         -- start string write if previous write string finished
         str_out_start <= '1' when not ws_busy else '0';
@@ -281,10 +279,14 @@ begin
         ws : process
         begin
             wait until rising_edge(clk);
+
             
             case out_status is
                 when IDLE =>
                     if str_out_start = '1' then
+
+                        -- convert counter to hex if not currently writing the string
+                        str <= to_hexstr(counter, str'length - 1) & character'val(10);
                         ws_busy <= '1';
                         out_status <= START;
                     end if;
@@ -300,12 +302,13 @@ begin
                     -- wait for uart_out_idle to become inactive
                     if not uart_out_idle then
                         out_status <= SEND;
+                        uart_out_start <= '0';
                         index <= index + 1;
                     end if;
 
                 when SEND =>
                     -- wait for uart_out_idle to become active again
-                    if uart_out_idle = '1' then
+                    if uart_out_idle then
                         if index > str'length then
                             index <= 0;
                             ws_busy <= '0';
