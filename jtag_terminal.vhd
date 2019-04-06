@@ -177,18 +177,25 @@ architecture rtl of jtag_terminal is
     signal uart_in_data             : character;
     signal uart_in_paused           : std_ulogic;
     
-    function to_hexstr(num : unsigned) return string is
-        variable str    : string(1 to num'length / 4 + 2);
-        variable nibble : unsigned(3 downto 0);
+    function to_hexstr(signal num : unsigned; len : natural) return string is
+        variable str        : string(1 to len);
+        variable nibble     : integer;
     begin
-        for i in str'reverse_range loop
-            nibble := num(i + 3 - 1 downto i - 1);
-            str(i) := character'val(to_integer(nibble) + character'pos('0'));
-            -- str(i) := 'A';
+        assert false report "str'high=" & integer'image(str'high) severity note;
+        for i in 0 to len - 1 loop
+            nibble := to_integer(num(num'high - i * 4 downto num'high - i * 4 - 3));
+            if nibble > 9 then
+                str(i + 1) := character'val(nibble + character'pos('A') - 10);
+            else
+                str(i + 1) := character'val(nibble + character'pos('0'));
+            end if;
+            assert false report "str(" & integer'image(i + 1) & ") = " & str(i + 1) severity note;
         end loop;
-        str(str'low) := character'val(10);
+        assert false report "str=" & str severity note;
+        -- str := (others => 'A');
         return str;
     end function to_hexstr;
+
 begin 
     clk <= MAX10_CLK1_50;
     
@@ -217,8 +224,8 @@ begin
     i_uart : entity work.jtag_uart
         generic map
         (
-            LOG2_RXFIFO_DEPTH   => 0,
-            LOG2_TXFIFO_DEPTH   => 0
+            LOG2_RXFIFO_DEPTH   => 32,
+            LOG2_TXFIFO_DEPTH   => 32
         )
         port map
         (
@@ -249,33 +256,66 @@ begin
         );
       
     echo : block
-        signal c            : character := '+';
-        signal have_it      : std_ulogic := '0';
-        signal counter      : integer := 0;
+        signal c                : character := '+';
+        signal have_it          : std_ulogic := '0';
+        signal counter          : unsigned(7 downto 0) := 8d"0";
+        constant counter_max    : unsigned(7 downto 0) := 8d"255";
+        signal str              : string(1 to 3);
+        type out_status_type is (IDLE, START, REQ, SEND);
+        signal out_status       : out_status_type := IDLE;
+        signal str_out_start    : std_ulogic := '0';
+        signal ws_busy          : std_ulogic := '0';
+        signal index            : integer := 0;
     begin
-        process
-            constant counter_max    : integer := 4096;
-            variable str            : string(1 to 6);
+        -- count up counter if not currently writing the string
+        counter <= 8d"0" when counter = counter_max and rising_edge(clk) and ws_busy = '0' else
+                   resize(counter + 1, counter'length) when rising_edge(clk) and ws_busy = '0'
+                   else counter;
+
+        -- convert counter to hex if not currently writing the string
+        str <= to_hexstr(counter, str'length - 1) & character'val(10) when rising_edge(clk) and ws_busy = '0';
+
+        -- start string write if previous write string finished
+        str_out_start <= '1' when not ws_busy else '0';
+
+        ws : process
         begin
             wait until rising_edge(clk);
+            
+            case out_status is
+                when IDLE =>
+                    if str_out_start = '1' then
+                        ws_busy <= '1';
+                        out_status <= START;
+                    end if;
 
-            if counter /= counter_max then
-                counter <= counter + 1;
-            else
-                counter <= 0;
-            end if;
+                when START =>
+                    if uart_out_idle then
+                        uart_out_data <= str(index);
+                        uart_out_start <= '1';
+                        out_status <= REQ;
+                    end if;
 
-            str := to_hexstr(to_unsigned(counter, 16));
+                when REQ =>
+                    -- wait for uart_out_idle to become inactive
+                    if not uart_out_idle then
+                        out_status <= SEND;
+                        index <= index + 1;
+                    end if;
 
-            for i in str'range loop
-                if uart_out_idle then
-                    uart_out_data <= str(i);
-                    uart_out_start <= '1';
-                else
-                    uart_out_start <= '0';
-                end if;
-            end loop;
-        end process;
+                when SEND =>
+                    -- wait for uart_out_idle to become active again
+                    if uart_out_idle = '1' then
+                        if index > str'length then
+                            index <= 0;
+                            ws_busy <= '0';
+                            out_status <= IDLE;
+                        else
+                            out_status <= START;
+                        end if;
+                    end if;
+            end case;
+        end process ws;
 
         /*
         process
