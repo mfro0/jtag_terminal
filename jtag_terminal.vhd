@@ -177,6 +177,18 @@ architecture rtl of jtag_terminal is
     signal uart_in_data             : character;
     signal uart_in_paused           : std_ulogic;
     
+    function to_hexstr(num : unsigned) return string is
+        variable str    : string(1 to num'length / 4 + 2);
+        variable nibble : unsigned(3 downto 0);
+    begin
+        for i in str'reverse_range loop
+            nibble := num(i + 3 - 1 downto i - 1);
+            str(i) := character'val(to_integer(nibble) + character'pos('0'));
+            -- str(i) := 'A';
+        end loop;
+        str(str'low) := character'val(10);
+        return str;
+    end function to_hexstr;
 begin 
     clk <= MAX10_CLK1_50;
     
@@ -239,7 +251,33 @@ begin
     echo : block
         signal c            : character := '+';
         signal have_it      : std_ulogic := '0';
+        signal counter      : integer := 0;
     begin
+        process
+            constant counter_max    : integer := 4096;
+            variable str            : string(1 to 6);
+        begin
+            wait until rising_edge(clk);
+
+            if counter /= counter_max then
+                counter <= counter + 1;
+            else
+                counter <= 0;
+            end if;
+
+            str := to_hexstr(to_unsigned(counter, 16));
+
+            for i in str'range loop
+                if uart_out_idle then
+                    uart_out_data <= str(i);
+                    uart_out_start <= '1';
+                else
+                    uart_out_start <= '0';
+                end if;
+            end loop;
+        end process;
+
+        /*
         process
         begin
             wait until rising_edge(clk);
@@ -262,6 +300,7 @@ begin
                 uart_out_start <= '0';
             end if;
         end process;
+        */
     end block;
     
     LED(0) <= button_reset_n;
