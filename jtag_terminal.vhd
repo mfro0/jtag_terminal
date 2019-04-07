@@ -177,7 +177,7 @@ architecture rtl of jtag_terminal is
     signal uart_in_data             : character;
     signal uart_in_paused           : std_ulogic;
     
-    function to_hexstr(signal num : unsigned; len : natural) return string is
+    function to_hstring(signal num : unsigned; len : natural) return string is
         variable str        : string(1 to len);
         variable nibble     : integer;
     begin
@@ -284,7 +284,7 @@ begin
                             end if;
                             
                             -- convert counter to hex
-                            str <= to_hexstr(counter, str'length - 1) & character'val(10);
+                            str <= to_hstring(counter, str'length - 1) & character'val(10);
                             
                             ws_busy <= '1';
                             out_status <= START;

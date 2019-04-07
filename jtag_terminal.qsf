@@ -36,18 +36,18 @@
 # -------------------------------------------------------------------------- #
 
 
-set_global_assignment -name FAMILY "MAX 10"
-set_global_assignment -name DEVICE 10M50DAF484C6GES
+set_global_assignment -name FAMILY "Cyclone III"
+set_global_assignment -name DEVICE EP3C40F484C6
 set_global_assignment -name TOP_LEVEL_ENTITY jtag_terminal
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 18.1.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "11:08:23  MARCH 31, 2019"
-set_global_assignment -name LAST_QUARTUS_VERSION "18.1.0 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION 13.1
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
-set_global_assignment -name DEVICE_FILTER_PACKAGE FBGA
-set_global_assignment -name DEVICE_FILTER_PIN_COUNT 484
-set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 6
+set_global_assignment -name DEVICE_FILTER_PACKAGE ANY
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT ANY
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE ANY
 set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 256
 set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (VHDL)"
 set_global_assignment -name EDA_TIME_SCALE "1 ps" -section_id eda_simulation
@@ -244,7 +244,7 @@ set_location_assignment PIN_Y1 -to PMONITOR_I2C_SDA
 set_location_assignment PIN_AB9 -to RH_TEMP_DRDY_n
 set_location_assignment PIN_Y10 -to RH_TEMP_I2C_SCL
 set_location_assignment PIN_AA10 -to RH_TEMP_I2C_SDA
-set_location_assignment PIN_T20 -to SD_CLK
+set_location_assignment PIN_C15 -to SD_CLK
 set_location_assignment PIN_T21 -to SD_CMD
 set_location_assignment PIN_U22 -to SD_CMD_DIR
 set_location_assignment PIN_T22 -to SD_D0_DIR
@@ -344,7 +344,7 @@ set_location_assignment PIN_V17 -to GPIO1_D[21]
 set_location_assignment PIN_W3 -to GPIO1_D[22]
 set_location_assignment PIN_U6 -to BBB_PWR_BUT
 set_location_assignment PIN_AA2 -to BBB_SYS_RESET_n
-set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
+# set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
 set_global_assignment -name UNIPHY_SEQUENCER_DQS_CONFIG_ENABLE ON
 set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
 set_global_assignment -name UNIPHY_TEMP_VER_CODE 459570810
@@ -378,9 +378,9 @@ set_global_assignment -name ASSIGNMENT_GROUP_MEMBER DDR3_DM -section_id FAST_IO
 set_global_assignment -name ASSIGNMENT_GROUP_MEMBER DDR3_DQ -section_id FAST_IO
 set_global_assignment -name ASSIGNMENT_GROUP_MEMBER DDR3_DQS_n -section_id FAST_IO
 set_global_assignment -name ASSIGNMENT_GROUP_MEMBER DDR3_DQS_p -section_id FAST_IO
-set_global_assignment -name TIMING_ANALYZER_DO_REPORT_TIMING ON
-set_global_assignment -name TIMING_ANALYZER_MULTICORNER_ANALYSIS ON
-set_global_assignment -name OCP_HW_EVAL DISABLE
+# set_global_assignment -name TIMING_ANALYZER_DO_REPORT_TIMING ON
+# set_global_assignment -name TIMING_ANALYZER_MULTICORNER_ANALYSIS ON
+# set_global_assignment -name OCP_HW_EVAL DISABLE
 set_location_assignment PIN_L15 -to DDR3_DQS_n[0]
 set_location_assignment PIN_K15 -to DDR3_DQS_n[1]
 set_location_assignment PIN_H2 -to altera_reserved_tms
@@ -399,4 +399,483 @@ set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 
+
+set_location_assignment PIN_Y3 -to FB_AD[0]
+set_location_assignment PIN_Y6 -to FB_AD[1]
+set_location_assignment PIN_AA3 -to FB_AD[2]
+set_location_assignment PIN_AB3 -to FB_AD[3]
+set_location_assignment PIN_W6 -to FB_AD[4]
+set_location_assignment PIN_V7 -to FB_AD[5]
+set_location_assignment PIN_AA4 -to FB_AD[6]
+set_location_assignment PIN_AB4 -to FB_AD[7]
+set_location_assignment PIN_AA5 -to FB_AD[8]
+set_location_assignment PIN_AB5 -to FB_AD[9]
+set_location_assignment PIN_W7 -to FB_AD[10]
+set_location_assignment PIN_Y7 -to FB_AD[11]
+set_location_assignment PIN_U9 -to FB_AD[12]
+set_location_assignment PIN_V8 -to FB_AD[13]
+set_location_assignment PIN_W8 -to FB_AD[14]
+set_location_assignment PIN_AA7 -to FB_AD[15]
+set_location_assignment PIN_AB7 -to FB_AD[16]
+set_location_assignment PIN_Y8 -to FB_AD[17]
+set_location_assignment PIN_V9 -to FB_AD[18]
+set_location_assignment PIN_V10 -to FB_AD[19]
+set_location_assignment PIN_T10 -to FB_AD[20]
+set_location_assignment PIN_U10 -to FB_AD[21]
+set_location_assignment PIN_AA8 -to FB_AD[22]
+set_location_assignment PIN_AB8 -to FB_AD[23]
+set_location_assignment PIN_T11 -to FB_AD[24]
+set_location_assignment PIN_AA9 -to FB_AD[25]
+set_location_assignment PIN_AB9 -to FB_AD[26]
+set_location_assignment PIN_U11 -to FB_AD[27]
+set_location_assignment PIN_V11 -to FB_AD[28]
+set_location_assignment PIN_W10 -to FB_AD[29]
+set_location_assignment PIN_Y10 -to FB_AD[30]
+set_location_assignment PIN_AA10 -to FB_AD[31]
+set_location_assignment PIN_R7 -to FB_ALE
+set_location_assignment PIN_N19 -to LED_FPGA_OK
+set_location_assignment PIN_R5 -to TIN0
+set_location_assignment PIN_W20 -to VA[0]
+set_location_assignment PIN_W22 -to VA[1]
+set_location_assignment PIN_W21 -to VA[2]
+set_location_assignment PIN_Y22 -to VA[3]
+set_location_assignment PIN_AA22 -to VA[4]
+set_location_assignment PIN_Y21 -to VA[5]
+set_location_assignment PIN_AA21 -to VA[6]
+set_location_assignment PIN_AA20 -to VA[7]
+set_location_assignment PIN_AB20 -to VA[8]
+set_location_assignment PIN_AB19 -to VA[9]
+set_location_assignment PIN_V21 -to VA[10]
+set_location_assignment PIN_U19 -to VA[11]
+set_location_assignment PIN_AA18 -to VA[12]
+set_location_assignment PIN_U15 -to VCKE
+set_location_assignment PIN_M22 -to VD[0]
+set_location_assignment PIN_M21 -to VD[1]
+set_location_assignment PIN_P22 -to VD[2]
+set_location_assignment PIN_R20 -to VD[3]
+set_location_assignment PIN_P21 -to VD[4]
+set_location_assignment PIN_R17 -to VD[5]
+set_location_assignment PIN_R19 -to VD[6]
+set_location_assignment PIN_U21 -to VD[7]
+set_location_assignment PIN_V22 -to VD[8]
+set_location_assignment PIN_R18 -to VD[9]
+set_location_assignment PIN_P17 -to VD[10]
+set_location_assignment PIN_R21 -to VD[11]
+set_location_assignment PIN_N17 -to VD[12]
+set_location_assignment PIN_P20 -to VD[13]
+set_location_assignment PIN_R22 -to VD[14]
+set_location_assignment PIN_N20 -to VD[15]
+set_location_assignment PIN_T12 -to VD[16]
+set_location_assignment PIN_Y13 -to VD[17]
+set_location_assignment PIN_AA13 -to VD[18]
+set_location_assignment PIN_V14 -to VD[19]
+set_location_assignment PIN_U13 -to VD[20]
+set_location_assignment PIN_V15 -to VD[21]
+set_location_assignment PIN_W14 -to VD[22]
+set_location_assignment PIN_AB16 -to VD[23]
+set_location_assignment PIN_AB15 -to VD[24]
+set_location_assignment PIN_AA14 -to VD[25]
+set_location_assignment PIN_AB14 -to VD[26]
+set_location_assignment PIN_V13 -to VD[27]
+set_location_assignment PIN_W13 -to VD[28]
+set_location_assignment PIN_AB13 -to VD[29]
+set_location_assignment PIN_V12 -to VD[30]
+set_location_assignment PIN_U12 -to VD[31]
+set_location_assignment PIN_AA16 -to VDM[0]
+set_location_assignment PIN_V16 -to VDM[1]
+set_location_assignment PIN_U20 -to VDM[2]
+set_location_assignment PIN_T17 -to VDM[3]
+set_location_assignment PIN_AA15 -to VDQS[0]
+set_location_assignment PIN_W15 -to VDQS[1]
+set_location_assignment PIN_U22 -to VDQS[2]
+set_location_assignment PIN_T16 -to VDQS[3]
+set_location_assignment PIN_G18 -to VB[0]
+set_location_assignment PIN_H17 -to VB[1]
+set_location_assignment PIN_C22 -to VB[2]
+set_location_assignment PIN_C21 -to VB[3]
+set_location_assignment PIN_B22 -to VB[4]
+set_location_assignment PIN_B21 -to VB[5]
+set_location_assignment PIN_C20 -to VB[6]
+set_location_assignment PIN_D20 -to VB[7]
+set_location_assignment PIN_H19 -to VG[0]
+set_location_assignment PIN_E22 -to VG[1]
+set_location_assignment PIN_E21 -to VG[2]
+set_location_assignment PIN_H18 -to VG[3]
+set_location_assignment PIN_J17 -to VG[4]
+set_location_assignment PIN_H16 -to VG[5]
+set_location_assignment PIN_D22 -to VG[6]
+set_location_assignment PIN_D21 -to VG[7]
+set_location_assignment PIN_J22 -to VR[0]
+set_location_assignment PIN_J21 -to VR[1]
+set_location_assignment PIN_H22 -to VR[2]
+set_location_assignment PIN_H21 -to VR[3]
+set_location_assignment PIN_K17 -to VR[4]
+set_location_assignment PIN_K18 -to VR[5]
+set_location_assignment PIN_J18 -to VR[6]
+set_location_assignment PIN_F22 -to VR[7]
+set_location_assignment PIN_M6 -to ACSI_A1
+set_location_assignment PIN_B1 -to ACSI_D[0]
+set_location_assignment PIN_G5 -to ACSI_D[1]
+set_location_assignment PIN_E3 -to ACSI_D[2]
+set_location_assignment PIN_C2 -to ACSI_D[3]
+set_location_assignment PIN_C1 -to ACSI_D[4]
+set_location_assignment PIN_D2 -to ACSI_D[5]
+set_location_assignment PIN_H7 -to ACSI_D[6]
+set_location_assignment PIN_H6 -to ACSI_D[7]
+set_location_assignment PIN_L6 -to ACSI_DIR
+set_location_assignment PIN_F15 -to DSA_D
+set_location_assignment PIN_D15 -to DTR
+set_location_assignment PIN_A11 -to DVI_INT
+set_location_assignment PIN_G21 -to E0_INT
+set_location_assignment PIN_F7 -to LP_D[0]
+set_location_assignment PIN_C4 -to LP_D[1]
+set_location_assignment PIN_C3 -to LP_D[2]
+set_location_assignment PIN_E7 -to LP_D[3]
+set_location_assignment PIN_D6 -to LP_D[4]
+set_location_assignment PIN_B3 -to LP_D[5]
+set_location_assignment PIN_A3 -to LP_D[6]
+set_location_assignment PIN_G8 -to LP_D[7]
+set_location_assignment PIN_E6 -to LP_STR
+set_location_assignment PIN_H5 -to MIDI_OLR
+set_location_assignment PIN_B2 -to MIDI_TLR
+set_location_assignment PIN_AA2 -to PIC_INT
+set_location_assignment PIN_B18 -to RTS
+set_location_assignment PIN_J6 -to SCSI_D[0]
+set_location_assignment PIN_E1 -to SCSI_D[1]
+set_location_assignment PIN_F2 -to SCSI_D[2]
+set_location_assignment PIN_F1 -to SCSI_D[3]
+set_location_assignment PIN_G4 -to SCSI_D[4]
+set_location_assignment PIN_G3 -to SCSI_D[5]
+set_location_assignment PIN_L8 -to SCSI_D[6]
+set_location_assignment PIN_K8 -to SCSI_D[7]
+set_location_assignment PIN_J7 -to SCSI_DIR
+set_location_assignment PIN_M7 -to SCSI_PAR
+set_location_assignment PIN_E14 -to SD_CMD_D1
+set_location_assignment PIN_A18 -to TxD
+set_location_assignment PIN_A17 -to YM_QA
+set_location_assignment PIN_G13 -to YM_QB
+set_location_assignment PIN_E15 -to YM_QC
+set_location_assignment PIN_M19 -to SD_WP
+set_location_assignment PIN_H15 -to RxD
+set_location_assignment PIN_B19 -to RI
+set_location_assignment PIN_G7 -to LP_BUSY
+set_location_assignment PIN_Y1 -to IDE_RDY
+set_location_assignment PIN_G22 -to IDE_INT
+set_location_assignment PIN_A19 -to DCD
+set_location_assignment PIN_H14 -to CTS
+set_location_assignment PIN_W19 -to BA[0]
+set_location_assignment PIN_AA19 -to BA[1]
+set_location_assignment PIN_M4 -to ACSI_ACKn
+set_location_assignment PIN_M2 -to ACSI_CSn
+set_location_assignment PIN_M1 -to ACSI_RESETn
+set_location_assignment PIN_J4 -to ACSI_INTn
+set_location_assignment PIN_K7 -to ACSI_DRQn
+set_location_assignment PIN_AB10 -to CLK_24M576
+set_location_assignment PIN_J1 -to CLK_USB
+set_location_assignment PIN_T4 -to CLK_25M0
+set_location_assignment PIN_AB17 -to CLK_DDR_OUT
+set_location_assignment PIN_AA17 -to CLK_DDR_OUTn
+set_location_assignment PIN_U8 -to FB_SIZE[0]
+set_location_assignment PIN_Y4 -to FB_SIZE[1]
+set_location_assignment PIN_T8 -to FB_CSn[1]
+set_location_assignment PIN_T9 -to FB_CSn[2]
+set_location_assignment PIN_V6 -to FB_CSn[3]
+set_location_assignment PIN_T3 -to FB_BURSTn
+set_location_assignment PIN_R6 -to FB_OEn
+set_location_assignment PIN_T5 -to FB_WRn
+set_location_assignment PIN_T7 -to FB_TAn
+set_location_assignment PIN_R2 -to IDE_CSn[0]
+set_location_assignment PIN_R1 -to IDE_CSn[1]
+set_location_assignment PIN_P2 -to IDE_WRn
+set_location_assignment PIN_P1 -to IDE_RDn
+set_location_assignment PIN_F16 -to FDD_HD_DD
+set_location_assignment PIN_K21 -to HSYNC
+set_location_assignment PIN_G2 -to CLK_MAIN
+set_location_assignment PIN_A8 -to DSP_IO[0]
+set_location_assignment PIN_A7 -to DSP_IO[1]
+set_location_assignment PIN_B7 -to DSP_IO[2]
+set_location_assignment PIN_A6 -to DSP_IO[3]
+set_location_assignment PIN_B6 -to DSP_IO[4]
+set_location_assignment PIN_E9 -to DSP_IO[5]
+set_location_assignment PIN_C8 -to DSP_IO[6]
+set_location_assignment PIN_C7 -to DSP_IO[7]
+set_location_assignment PIN_G10 -to DSP_IO[8]
+set_location_assignment PIN_A15 -to DSP_IO[9]
+set_location_assignment PIN_B15 -to DSP_IO[10]
+set_location_assignment PIN_C13 -to DSP_IO[11]
+set_location_assignment PIN_D13 -to DSP_IO[12]
+set_location_assignment PIN_E13 -to DSP_IO[13]
+set_location_assignment PIN_A14 -to DSP_IO[14]
+set_location_assignment PIN_B14 -to DSP_IO[15]
+set_location_assignment PIN_A13 -to DSP_IO[16]
+set_location_assignment PIN_B13 -to DSP_IO[17]
+set_location_assignment PIN_E5 -to LP_DIR
+set_location_assignment PIN_N2 -to SCSI_ACKn
+set_location_assignment PIN_M3 -to SCSI_ATNn
+set_location_assignment PIN_N8 -to SCSI_BUSYn
+set_location_assignment PIN_N6 -to SCSI_RSTn
+set_location_assignment PIN_M8 -to SCSI_SELn
+set_location_assignment PIN_H2 -to SCSI_MSGn
+set_location_assignment PIN_J3 -to SCSI_IOn
+set_location_assignment PIN_U1 -to SCSI_DRQn
+set_location_assignment PIN_H1 -to SCSI_CDn
+set_location_assignment PIN_F19 -to CLK_PIXEL
+set_location_assignment PIN_B11 -to RSTO_MCFn
+set_location_assignment PIN_E12 -to MIDI_IN
+set_location_assignment PIN_F13 -to SD_D3
+set_location_assignment PIN_M20 -to SD_DETECT
+set_location_assignment PIN_B17 -to SD_D2
+set_location_assignment PIN_A16 -to SD_D1
+set_location_assignment PIN_B16 -to SD_D0
+set_location_assignment PIN_T21 -to MASTERn
+set_location_assignment PIN_E11 -to DREQ1n
+set_location_assignment PIN_A12 -to DACK1n
+set_location_assignment PIN_B12 -to DACK0n
+set_location_assignment PIN_T22 -to TOUT0n
+set_location_assignment PIN_AB18 -to VCASn
+set_location_assignment PIN_T18 -to VCSn
+set_location_assignment PIN_W17 -to VRASn
+set_location_assignment PIN_Y17 -to VWEn
+set_location_assignment PIN_V1 -to PD_VGAn
+set_location_assignment PIN_W2 -to CF_CSn[0]
+set_location_assignment PIN_W1 -to CF_CSn[1]
+set_location_assignment PIN_F21 -to IRQn[2]
+set_location_assignment PIN_H20 -to IRQn[3]
+set_location_assignment PIN_F20 -to IRQn[4]
+set_location_assignment PIN_P5 -to IRQn[5]
+set_location_assignment PIN_P7 -to IRQn[6]
+set_location_assignment PIN_N7 -to IRQn[7]
+set_location_assignment PIN_AA1 -to PCI_INTAn
+set_location_assignment PIN_V4 -to PCI_INTBn
+set_location_assignment PIN_V3 -to PCI_INTCn
+set_location_assignment PIN_P6 -to PCI_INTDn
+set_location_assignment PIN_P3 -to ROM3n
+set_location_assignment PIN_U2 -to ROM4n
+set_location_assignment PIN_N5 -to RP_LDSn
+set_location_assignment PIN_P4 -to RP_UDSn
+set_location_assignment PIN_B20 -to FDD_SDSELn
+set_location_assignment PIN_B4 -to DSP_SRBHEn
+set_location_assignment PIN_A4 -to DSP_SRBLEn
+set_location_assignment PIN_B8 -to DSP_SRCSn
+set_location_assignment PIN_F11 -to DSP_SROEn
+set_location_assignment PIN_F8 -to DSP_SRWEn
+set_location_assignment PIN_G14 -to FDD_WDn
+set_location_assignment PIN_D17 -to FDD_WR_GATEn
+set_location_assignment PIN_B5 -to DSP_SRD[0]
+set_location_assignment PIN_A5 -to DSP_SRD[1]
+set_location_assignment PIN_C6 -to DSP_SRD[2]
+set_location_assignment PIN_G11 -to DSP_SRD[3]
+set_location_assignment PIN_C10 -to DSP_SRD[4]
+set_location_assignment PIN_F9 -to DSP_SRD[5]
+set_location_assignment PIN_E10 -to DSP_SRD[6]
+set_location_assignment PIN_H11 -to DSP_SRD[7]
+set_location_assignment PIN_B9 -to DSP_SRD[8]
+set_location_assignment PIN_A10 -to DSP_SRD[9]
+set_location_assignment PIN_A9 -to DSP_SRD[10]
+set_location_assignment PIN_B10 -to DSP_SRD[11]
+set_location_assignment PIN_D10 -to DSP_SRD[12]
+set_location_assignment PIN_F10 -to DSP_SRD[13]
+set_location_assignment PIN_G9 -to DSP_SRD[14]
+set_location_assignment PIN_H10 -to DSP_SRD[15]
+set_location_assignment PIN_T1 -to CF_WP
+set_location_assignment PIN_C19 -to FDD_TRACK00
+set_location_assignment PIN_D19 -to FDD_WPn
+set_location_assignment PIN_A20 -to FDD_RDn
+set_location_assignment PIN_C17 -to FDD_DCHGn
+set_location_assignment PIN_E16 -to FDD_INDEXn
+set_location_assignment PIN_G17 -to BLANKn
+set_location_assignment PIN_F17 -to SYNCn
+set_location_assignment PIN_G15 -to FDD_STEP_DIR
+set_location_assignment PIN_F14 -to FDD_STEPn
+set_location_assignment PIN_G16 -to FDD_MOT_ON
+set_location_assignment PIN_K19 -to VSYNC
+set_location_assignment PIN_M5 -to IDE_RESn
+set_global_assignment -name LL_ROOT_REGION ON -entity FIREBEE_TOP -section_id "Root Region"
+set_global_assignment -name LL_MEMBER_STATE LOCKED -entity FIREBEE_TOP -section_id "Root Region"
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -entity FIREBEE_TOP -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -entity FIREBEE_TOP -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -entity FIREBEE_TOP -section_id Top
+set_instance_assignment -name IO_STANDARD "2.5 V" -to VA -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "2.5 V" -to VD -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "2.5 V" -to VDM -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "2.5 V" -to VDQS -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "2.5 V" -to VCKE -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LED_FPGA_OK -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "2.5 V" -to BA -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVTTL" -to VB -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVTTL" -to VG -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVTTL" -to VR -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to LP_D -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to LP_STR -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "2.5 V" -to CLK_DDR_OUT -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "2.5 V" -to CLK_DDR_OUTn -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVTTL" -to HSYNC -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to LP_DIR -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to DSP_IO[0] -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to DSP_IO[8] -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to DSP_IO[7] -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to DSP_IO[6] -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to DSP_IO[5] -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to DSP_IO[4] -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to DSP_IO[3] -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to DSP_IO[2] -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to DSP_IO[1] -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVTTL" -to CLK_PIXEL -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "2.5 V" -to VWEn -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "2.5 V" -to VRASn -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "2.5 V" -to VCSn -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "2.5 V" -to VCASn -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVTTL" -to VSYNC -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVTTL" -to BLANKn -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to SYNCn -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to IRQn[2] -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to IRQn[3] -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to IRQn[4] -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to DSP_SRD -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to DSP_SRBHEn -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to DSP_SRWEn -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to DSP_SRCSn -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.0-V LVCMOS" -to DSP_SRBLEn -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to DDRCLK -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to DDRCLK[0] -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to DDRCLK[1] -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to DDRCLK[2] -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to DDRCLK[3] -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to "Video:Fredi_Aschwanden|DDRCLK" -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to "Video:Fredi_Aschwanden|DDRCLK[0]" -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to "Video:Fredi_Aschwanden|DDRCLK[1]" -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to "Video:Fredi_Aschwanden|DDRCLK[2]" -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to "Video:Fredi_Aschwanden|DDRCLK[3]" -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to "Video:Fredi_Aschwanden|DDR_CTR_BLITTER:DDR_CTR_BLITTER|DDRCLK" -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to "Video:Fredi_Aschwanden|DDR_CTR_BLITTER:DDR_CTR_BLITTER|DDRCLK[0]" -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to "Video:Fredi_Aschwanden|DDR_CTR_BLITTER:DDR_CTR_BLITTER|DDRCLK[1]" -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to "Video:Fredi_Aschwanden|DDR_CTR_BLITTER:DDR_CTR_BLITTER|DDRCLK[2]" -entity FIREBEE_TOP
+set_instance_assignment -name CLOCK_SETTINGS fast -to "Video:Fredi_Aschwanden|DDR_CTR_BLITTER:DDR_CTR_BLITTER|DDRCLK[3]" -entity FIREBEE_TOP
+set_instance_assignment -name INPUT_MAX_DELAY "4 ns" -from * -to FB_ALE -entity FIREBEE_TOP
+set_instance_assignment -name MAX_DELAY "5 ns" -from VD -to FB_AD -entity FIREBEE_TOP
+set_instance_assignment -name MAX_DELAY "5 ns" -from FB_AD -to VA -entity FIREBEE_TOP
+set_instance_assignment -name MAX_DELAY "5 ns" -from FB_AD -to nVRAS -entity FIREBEE_TOP
+set_instance_assignment -name MAX_DELAY "5 ns" -from FB_AD -to BA -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to LED_FPGA_OK -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to VCKE -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to FB_AD -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to BA -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to VA -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to VD -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to VDM -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to VDQS -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to VB -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to VG -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to VR -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to FB_AD -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to SD_WP -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to SD_CMD_D1 -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to SD_CLK -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to E0_INT -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to DVI_INT -entity FIREBEE_TOP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to SD_WP -entity FIREBEE_TOP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to TIN0 -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to TIN0 -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DSA_D -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SCSI_PAR -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SCSI_DIR -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to ACSI_A1 -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to ACSI_DIR -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to LP_STR -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to LP_D -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to ACSI_DRQn -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to ACSI_INTn -entity FIREBEE_TOP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to ACSI_DRQn -entity FIREBEE_TOP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to ACSI_INTn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to ACSI_CSn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to ACSI_ACKn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to ACSI_RESETn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to CLK_DDR_OUT -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to CLK_DDR_OUTn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to CLK_24M576 -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to CLK_USB -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to CLK_25M0 -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HSYNC -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to DSP_IO -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to CLK_MAIN -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to LP_DIR -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to CLK_PIXEL -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to RSTO_MCFn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SCSI_SELn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SCSI_RSTn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SCSI_BUSYn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SCSI_ATNn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SCSI_ACKn -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to SD_DETECT -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to SD_D3 -entity FIREBEE_TOP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to SD_DETECT -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to SD_D2 -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to SD_D1 -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to SD_D0 -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to VCSn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to VWEn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to VRASn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to VCASn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to BLANKn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to VSYNC -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to PD_VGAn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to SYNCn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to DSP_SRD -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to DSP_SRWEn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to DSP_SRCSn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to DSP_SRBLEn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to DSP_SRBHEn -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to PCI_INTAn -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to PCI_INTBn -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to PCI_INTCn -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to PCI_INTDn -entity FIREBEE_TOP
+set_instance_assignment -name PCI_IO ON -to PCI_INTAn -entity FIREBEE_TOP
+set_instance_assignment -name PCI_IO ON -to PCI_INTBn -entity FIREBEE_TOP
+set_instance_assignment -name PCI_IO ON -to PCI_INTCn -entity FIREBEE_TOP
+set_instance_assignment -name PCI_IO ON -to PCI_INTDn -entity FIREBEE_TOP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to PCI_INTAn -entity FIREBEE_TOP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to PCI_INTBn -entity FIREBEE_TOP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to PCI_INTCn -entity FIREBEE_TOP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to PCI_INTDn -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to DACK1n -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to TOUT0n -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to DACK0n -entity FIREBEE_TOP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to IRQn[2] -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to IRQn[3] -entity FIREBEE_TOP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to IRQn[6] -entity FIREBEE_TOP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to IRQn[5] -entity FIREBEE_TOP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to IRQn[4] -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to IRQn[4] -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to IRQn[5] -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to IRQn[6] -entity FIREBEE_TOP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to IRQn[3] -entity FIREBEE_TOP
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to IRQn[2] -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to FDD_MOT_ON -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to FDD_STEP_DIR -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to FDD_STEPn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to FDD_WDn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to FDD_WR_GATEn -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to FDD_SDSELn -entity FIREBEE_TOP
+set_location_assignment PIN_N1 -to AMKB_Tx
+set_location_assignment PIN_V2 -to IO[0]
+set_location_assignment PIN_J5 -to IO[1]
+set_location_assignment PIN_J2 -to IO[2]
+set_location_assignment PIN_L7 -to AMKB_Rx_PIC
+set_location_assignment PIN_Y2 -to AMKB_Rx
+set_location_assignment PIN_D1 -to ~ALTERA_ASDO_DATA1~
+set_location_assignment PIN_E2 -to ~ALTERA_FLASH_nCE_nCSO~
+set_location_assignment PIN_K2 -to ~ALTERA_DCLK~
+set_location_assignment PIN_K1 -to ~ALTERA_DATA0~
+set_location_assignment PIN_N22 -to ~ALTERA_DEV_OE~
+set_location_assignment PIN_N21 -to ~ALTERA_DEV_CLRn~
+set_location_assignment PIN_K22 -to ~ALTERA_nCEO~
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AMKB_Tx -entity FIREBEE_TOP
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AMKB_Rx -entity FIREBEE_TOP
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to AMKB_Tx -entity FIREBEE_TOP
+set_location_assignment PIN_AB12 -to CLK_33M0_IN
+set_instance_assignment -name PASSIVE_RESISTOR "PULL-UP" -to CLK_33M0_IN -entity FIREBEE_TOP
+set_instance_assignment -name FAST_INPUT_REGISTER ON -to fast -entity FIREBEE_TOP
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to fast -entity FIREBEE_TOP
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -entity FIREBEE_TOP -section_id Top
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
