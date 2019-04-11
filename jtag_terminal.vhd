@@ -190,7 +190,7 @@ architecture rtl of jtag_terminal is
             end if;
         end loop;
         return str;
-    end function to_hexstr;
+    end function to_hstring;
 
 begin 
     clk <= MAX10_CLK1_50;
