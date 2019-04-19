@@ -1,6 +1,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.math_real.log2;
+use ieee.math_real.ceil;
 
 entity jtag_terminal is
     port
@@ -177,21 +179,58 @@ architecture rtl of jtag_terminal is
     signal uart_in_data             : character;
     signal uart_in_paused           : std_ulogic;
     
-    function to_hstring(signal num : unsigned; len : natural) return string is
-        variable str        : string(1 to len);
-        variable nibble     : integer;
+    function to_hstring(value  : std_ulogic_vector) return string is
+        constant RESULT_LENGTH  : natural := (value'length + 3) / 4;
+        variable pad            : std_ulogic_vector(1 to result_length * 4 - value'length);
+        variable padded_value   : std_ulogic_vector(1 to result_length * 4);
+        variable result         : string(1 to result_length);
+        variable quad           : std_ulogic_vector(1 to 4);
     begin
-        for i in 0 to len - 1 loop
-            nibble := to_integer(num(num'high - i * 4 downto num'high - i * 4 - 3));
-            if nibble > 9 then
-                str(i + 1) := character'val(nibble + character'pos('a') - 10);
-            else
-                str(i + 1) := character'val(nibble + character'pos('0'));
-            end if;
+        if value (value'left) = 'Z' then
+            pad := (others => 'Z');
+        else
+            pad := (others => '0');
+        end if;
+        padded_value := pad & value;
+        for i in 1 to RESULT_LENGTH loop
+            quad := To_X01Z(padded_value(4 * i - 3 to 4 * i));
+            case quad is
+                when x"0"   => result(i) := '0';
+                when x"1"   => result(i) := '1';
+                when x"2"   => result(i) := '2';
+                when x"3"   => result(i) := '3';
+                when x"4"   => result(i) := '4';
+                when x"5"   => result(i) := '5';
+                when x"6"   => result(i) := '6';
+                when x"7"   => result(i) := '7';
+                when x"8"   => result(i) := '8';
+                when x"9"   => result(i) := '9';
+                when x"A"   => result(i) := 'A';
+                when x"B"   => result(i) := 'B';
+                when x"C"   => result(i) := 'C';
+                when x"D"   => result(i) := 'D';
+                when x"E"   => result(i) := 'E';
+                when x"F"   => result(i) := 'F';
+                when "ZZZZ" => result(i) := 'Z';
+                when others => result(i) := 'X';
+            end case;
         end loop;
-        return str;
+        return result;
     end function to_hstring;
 
+    function to_hstring(value : natural) return string is
+        constant VALUE_WIDTH    : integer := integer(ceil(log2(real(value'high))));
+        variable uns            : unsigned (VALUE_WIDTH - 1 downto 0) := (others => '0');
+    begin
+        uns := to_unsigned(value, uns'length);
+        return to_hstring(std_ulogic_vector(uns));
+    end function to_hstring;
+    
+    function to_hstring(value : unsigned) return string is
+    begin
+        return to_hstring(std_ulogic_vector(value));
+    end function to_hstring;
+    
 begin 
     clk <= MAX10_CLK1_50;
     
@@ -255,14 +294,14 @@ begin
     echo : block
         signal c                : character := '+';
         signal have_it          : std_ulogic := '0';
-        signal counter          : unsigned(15 downto 0) := 16d"0";
-        constant counter_max    : unsigned(15 downto 0) := 16d"65535";
-        signal str              : string(1 to 5);
+        signal counter          : natural range 0 to 255;
+        constant counter_max    : natural := 255;
+        signal str              : string(1 to 3);
         type out_status_type is (IDLE, START, REQ, SEND);
         signal out_status       : out_status_type := IDLE;
         signal str_out_start    : std_ulogic := '0';
         signal ws_busy          : std_ulogic := '0';
-        signal index            : integer := 0;
+        signal index            : integer := str'low;
     begin
         -- start string write if previous write string finished
         str_out_start <= '1' when not ws_busy else '0';
@@ -270,7 +309,7 @@ begin
         ws : process(all)
         begin
             if not reset_n then
-                counter <= (others => '0');
+                counter <= 0;
             elsif rising_edge(clk) then
                 case out_status is
                     when IDLE =>
@@ -278,13 +317,13 @@ begin
     
                             -- count up counter
                             if counter = counter_max then
-                                counter <= (others => '0');
+                                counter <= 0;
                             else
-                                counter <= resize(counter + 1, counter'length);
+                                counter <= counter + 1;
                             end if;
                             
                             -- convert counter to hex
-                            str <= to_hstring(counter, str'length - 1) & character'val(10);
+                            str <= to_hstring(to_unsigned(counter, integer(ceil(log2(real(counter'high)))))) & character'val(10);
                             
                             ws_busy <= '1';
                             out_status <= START;
@@ -308,8 +347,8 @@ begin
                     when SEND =>
                         -- wait for uart_out_idle to become active again
                         if uart_out_idle then
-                            if index > str'length then
-                                index <= 0;
+                            if index > str'high then
+                                index <= str'low;
                                 ws_busy <= '0';
                                 out_status <= IDLE;
                             else
