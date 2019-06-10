@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity deca_reset is
     generic
     (
-        WAIT_TICKS      : integer := 1000
+        WAIT_TICKS      : natural := 10
     );
     
     port
@@ -18,12 +18,13 @@ entity deca_reset is
 end entity deca_reset;
 
 architecture rtl of deca_reset is
-    signal counter      : integer := WAIT_TICKS;
+    signal counter      : natural := WAIT_TICKS;
 begin
     p_reset_delay : process
     begin
         wait until rising_edge(clk);
         if counter /= 0 then
+            reset_n <= '0';
             counter <= counter - 1;
         else
             -- reset_n <= reset_button_n and lock_pll;     -- PLL does not lock when it's optimized away

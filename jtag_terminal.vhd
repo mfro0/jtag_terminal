@@ -4,6 +4,8 @@ use ieee.numeric_std.all;
 use ieee.math_real.log2;
 use ieee.math_real.ceil;
 
+use work.jtag_utils.all;
+
 entity jtag_terminal is
     port
     (
@@ -163,7 +165,7 @@ entity jtag_terminal is
 end entity jtag_terminal;
 
 architecture rtl of jtag_terminal is
-    signal reset_n                  : std_ulogic := '0';
+    signal reset_n                  : std_ulogic := '1';
     signal clk                      : std_ulogic;
     signal pll_locked               : std_ulogic := '1';
     
@@ -179,72 +181,20 @@ architecture rtl of jtag_terminal is
     signal uart_in_data             : character;
     signal uart_in_paused           : std_ulogic;
     
-    function to_hstring(value  : std_ulogic_vector) return string is
-        constant RESULT_LENGTH  : natural := (value'length + 3) / 4;
-        variable pad            : std_ulogic_vector(1 to result_length * 4 - value'length);
-        variable padded_value   : std_ulogic_vector(1 to result_length * 4);
-        variable result         : string(1 to result_length);
-        variable quad           : std_ulogic_vector(1 to 4);
-    begin
-        if value (value'left) = 'Z' then
-            pad := (others => 'Z');
-        else
-            pad := (others => '0');
-        end if;
-        padded_value := pad & value;
-        for i in 1 to RESULT_LENGTH loop
-            quad := To_X01Z(padded_value(4 * i - 3 to 4 * i));
-            case quad is
-                when x"0"   => result(i) := '0';
-                when x"1"   => result(i) := '1';
-                when x"2"   => result(i) := '2';
-                when x"3"   => result(i) := '3';
-                when x"4"   => result(i) := '4';
-                when x"5"   => result(i) := '5';
-                when x"6"   => result(i) := '6';
-                when x"7"   => result(i) := '7';
-                when x"8"   => result(i) := '8';
-                when x"9"   => result(i) := '9';
-                when x"A"   => result(i) := 'A';
-                when x"B"   => result(i) := 'B';
-                when x"C"   => result(i) := 'C';
-                when x"D"   => result(i) := 'D';
-                when x"E"   => result(i) := 'E';
-                when x"F"   => result(i) := 'F';
-                when "ZZZZ" => result(i) := 'Z';
-                when others => result(i) := 'X';
-            end case;
-        end loop;
-        return result;
-    end function to_hstring;
-
-    function to_hstring(value : natural) return string is
-        constant VALUE_WIDTH    : integer := integer(ceil(log2(real(value'high))));
-        variable uns            : unsigned (VALUE_WIDTH - 1 downto 0) := (others => '0');
-    begin
-        uns := to_unsigned(value, uns'length);
-        return to_hstring(std_ulogic_vector(uns));
-    end function to_hstring;
-    
-    function to_hstring(value : unsigned) return string is
-    begin
-        return to_hstring(std_ulogic_vector(value));
-    end function to_hstring;
-    
 begin 
     clk <= MAX10_CLK1_50;
     
     i_reset_circuit : entity work.deca_reset
         generic map
         (
-            WAIT_TICKS          => 1000
+            WAIT_TICKS          => 10000
         )
         port map
         (
             clk                 => clk,
-            reset_n             => reset_n,
+            lock_pll            => pll_locked,
             reset_button_n      => button_reset_n,
-            lock_pll            => pll_locked
+            reset_n             => reset_n
         );
     
 
@@ -259,7 +209,6 @@ begin
     i_uart : entity work.jtag_uart
         generic map
         (
-            -- disable FIFO to make sure we detect overruns
             LOG2_RXFIFO_DEPTH   => 0,
             LOG2_TXFIFO_DEPTH   => 0
         )
@@ -292,10 +241,10 @@ begin
         );
       
     echo : block
-        signal c                : character := '+';
-        signal have_it          : std_ulogic := '0';
         signal counter          : natural range 0 to 255;
         constant counter_max    : natural := 255;
+        constant delay          : natural := 100_000;
+        signal delay_counter    : natural := 0;
         signal str              : string(1 to 3);
         type out_status_type is (IDLE, START, REQ, SEND);
         signal out_status       : out_status_type := IDLE;
@@ -310,23 +259,32 @@ begin
         begin
             if not reset_n then
                 counter <= 0;
+                delay_counter <= 0;
+                out_status <= IDLE;
+                ws_busy <= '0';
             elsif rising_edge(clk) then
                 case out_status is
                     when IDLE =>
                         if str_out_start = '1' then
-    
-                            -- count up counter
-                            if counter = counter_max then
-                                counter <= 0;
+                            -- count up delay counter
+                            if delay_counter /= delay then
+                                delay_counter <= delay_counter + 1;
                             else
-                                counter <= counter + 1;
+                                delay_counter <= 0;
+    
+                                -- count up counter
+                                if counter = counter_max then
+                                    counter <= 0;
+                                else
+                                    counter <= counter + 1;
+                                end if;
+                            
+                                -- convert counter to hex and append a newline
+                                str <= to_hstring(to_unsigned(counter, integer(ceil(log2(real(counter'high)))))) & character'val(10);
+                            
+                                ws_busy <= '1';
+                                out_status <= START;
                             end if;
-                            
-                            -- convert counter to hex
-                            str <= to_hstring(to_unsigned(counter, integer(ceil(log2(real(counter'high)))))) & character'val(10);
-                            
-                            ws_busy <= '1';
-                            out_status <= START;
                         end if;
     
                     when START =>
@@ -358,31 +316,6 @@ begin
                 end case;
             end if; -- if rising_edge(clk)
         end process ws;
-
-        /*
-        process
-        begin
-            wait until rising_edge(clk);
-              
-            -- what comes in goes out
-              
-            if not uart_in_data_available and not have_it then
-                uart_in_data_req <= '1';
-            else
-                uart_in_data_req <= '0';
-                c <= uart_in_data;
-                have_it <= '1';
-            end if;
-            
-            if uart_out_idle and have_it then
-                uart_out_data <= c;
-                uart_out_start <= '1';
-                have_it <= '0';
-            else
-                uart_out_start <= '0';
-            end if;
-        end process;
-        */
     end block;
     
     LED(0) <= button_reset_n;
@@ -390,7 +323,7 @@ begin
     LED(2) <= '1';
     LED(3) <= '1';
     LED(4) <= '1';
-    LED(5) <= not pll_locked;
+    LED(5) <= '1';
     LED(6) <= '1';
     LED(7) <= blink;
 end architecture rtl;
