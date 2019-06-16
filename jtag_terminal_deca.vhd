@@ -184,13 +184,13 @@ architecture rtl of jtag_terminal_deca is
 begin 
     clk <= MAX10_CLK1_50;
     
+    i_jtag_terminal : entity work.jtag_terminal
+        port map
+        (
+            clk             => MAX10_CLK1_50,
+            reset_button    => KEY(0),
+            leds            => LED(2 downto 0)
+            
+        );
     
-    LED(0) <= button_reset_n;
-    LED(1) <= reset_n;
-    LED(2) <= '1';
-    LED(3) <= '1';
-    LED(4) <= '1';
-    LED(5) <= '1';
-    LED(6) <= '1';
-    LED(7) <= blink;
 end architecture rtl;

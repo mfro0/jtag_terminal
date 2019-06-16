@@ -18,7 +18,6 @@ end entity jtag_terminal;
 architecture rtl of jtag_terminal is
     signal reset_n                  : std_ulogic := '1';
     signal button_reset_n           : std_ulogic := '1';
-    signal blink                    : std_ulogic;
 
     signal uart_out_start           : std_ulogic := '0';
     signal uart_out_idle            : std_ulogic := '0';
@@ -74,7 +73,7 @@ begin
             tx_idle             => uart_out_idle
         );
 
-        i_blinker : entity work.blinker
+    i_blinker : entity work.blinker
         generic map
         (
             CLK_FREQUENCY       => 50_000_000,
@@ -84,7 +83,7 @@ begin
         (
             clk                         => clk,
             reset_n                     => reset_n,
-            led                         => blink
+            led                         => leds(0)
         );
       
     echo : block
